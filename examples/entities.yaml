@@ -14,6 +14,9 @@ metadata:
   name: example-website
   annotations:
     circleci.com/project-slug: bitbucket/pruebapostgresql/pruebapostgresql
+    #datadoghq.com/site: datadoghq.eu
+    datadoghq.com/dashboard-url: https://p.datadoghq.eu/sb/4d359e90-f342-11ee-9ca3-da7ad0900005-a3505d67a516640a94556e1eccdd7fff
+    datadoghq.com/graph-token: 3e686dc5c7e96dffa4fc91f13f2f6c94fd1d51b0d624a3ead5a74aba330285ca
 spec:
   type: service
   lifecycle: experimental
