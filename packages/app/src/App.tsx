@@ -32,11 +32,19 @@ import {
   OAuthRequestDialog,
   SignInPage,
 } from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+
+
+import { createApp } from '@backstage/app-defaults';
+import LightIcon from '@material-ui/icons/WbSunny';
+import { UnifiedThemeProvider, themes } from '@backstage/theme';
+
+import { multicolorTheme } from './components/theme/multicolorTheme';
+import { myTheme } from './components/theme/myTheme';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
 const app = createApp({
   apis,
@@ -58,8 +66,50 @@ const app = createApp({
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+          'guest',
+          {
+          id: 'github-auth-provider',
+          title: 'GitHub',
+          message: 'Sign in using GitHub',
+          apiRef: githubAuthApiRef,},
+        ]}
+      />
+    ),
   },
+  themes: [
+    // Keeping the original themes is completely optional
+    {
+      id: 'default-dark',
+      title: 'Default Dark',
+      variant: 'dark',
+      Provider: ({ children }) => <UnifiedThemeProvider theme={themes.dark} children={children} />,
+    },
+    {
+      id: 'default-light',
+      title: 'Default Light',
+      variant: 'light',
+      Provider: ({ children }) => <UnifiedThemeProvider theme={themes.light} children={children} />,
+    },
+    {
+    id: 'multicolor-theme',
+    title: 'Multicolor Theme',
+    variant: 'light',
+    icon: <LightIcon />,
+    Provider: ({ children }) => <UnifiedThemeProvider theme={multicolorTheme} children={children} />,
+    },
+    {
+      id: 'myTheme',
+      title: 'My Theme',
+      variant: 'light',
+      icon: <LightIcon />,
+      Provider: ({ children }) => <UnifiedThemeProvider theme={myTheme} children={children} />,
+      }
+  ]
 });
 
 const routes = (

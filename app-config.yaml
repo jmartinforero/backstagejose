@@ -28,8 +28,12 @@ backend:
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      host: 127.0.0.1
+      port: 5432
+      user: postgres
+      password: hola
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
@@ -44,6 +48,10 @@ integrations:
     #   token: ${GHE_TOKEN}
 
 proxy:
+  '/circleci/api':
+    target: https://circleci.com/api/v1.1
+    headers:
+      Circle-Token: CCIPAT_92dtKv7wLZgX7xrAaDJYVc_d5264e90bce867d380877580270d0e4ccd6f882b
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # endpoints:
@@ -63,13 +71,14 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
+  enviroment: development
   providers:
-    # See https://backstage.io/docs/auth/guest/provider
+    github:
+      development: 
+        clientId: $clientId
+        clientSecret: $clientSecret
+        callbackUrl: 'http://localhost:7007/api/auth/github/handler/frame'
     guest: {}
-
-scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
   import:

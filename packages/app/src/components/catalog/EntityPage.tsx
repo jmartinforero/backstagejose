@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import {
   EntityApiDefinitionCard,
   EntityConsumedApisCard,
@@ -39,7 +39,6 @@ import {
   EntityOwnershipCard,
 } from '@backstage/plugin-org';
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
-import { EmptyState } from '@backstage/core-components';
 import {
   Direction,
   EntityCatalogGraphCard,
@@ -58,6 +57,11 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
+import {
+  EntityCircleCIContent,
+  isCircleCIAvailable,
+} from '@circleci/backstage-plugin';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -74,22 +78,10 @@ const cicdContent = (
       <EntityGithubActionsContent />
     </EntitySwitch.Case>
 
-    <EntitySwitch.Case>
-      <EmptyState
-        title="No CI/CD available for this entity"
-        missing="info"
-        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
-        action={
-          <Button
-            variant="contained"
-            color="primary"
-            href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
-          >
-            Read more
-          </Button>
-        }
-      />
+    <EntitySwitch.Case if={isCircleCIAvailable}>
+      <EntityCircleCIContent />
     </EntitySwitch.Case>
+
   </EntitySwitch>
 );
 
@@ -121,6 +113,14 @@ const entityWarningContent = (
   </>
 );
 
+const circleciContent = (
+  <EntitySwitch>
+    <EntitySwitch.Case if={isCircleCIAvailable}>
+      <EntityCircleCIContent />
+    </EntitySwitch.Case>
+  </EntitySwitch>
+);
+
 const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     {entityWarningContent}
@@ -148,6 +148,10 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/circleci" title="CircleCI">
+      {circleciContent}
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
@@ -198,6 +202,11 @@ const websiteEntityPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/circleci" title="CircleCI">
+      {circleciContent}
+    </EntityLayout.Route>
+
 
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
