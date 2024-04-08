@@ -51,7 +51,7 @@ proxy:
   '/circleci/api':
     target: https://circleci.com/api/v1.1
     headers:
-      Circle-Token: CCIPAT_92dtKv7wLZgX7xrAaDJYVc_d5264e90bce867d380877580270d0e4ccd6f882b
+      Circle-Token: $circleAuthToken
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # endpoints:
