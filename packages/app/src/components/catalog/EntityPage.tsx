@@ -62,6 +62,12 @@ import {
   isCircleCIAvailable,
 } from '@circleci/backstage-plugin';
 
+import {
+  EntityDatadogContent,
+  EntityDatadogGraphCard,
+  isDatadogGraphAvailable
+} from '@roadiehq/backstage-plugin-datadog'
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -84,6 +90,19 @@ const cicdContent = (
 
   </EntitySwitch>
 );
+
+const datadogContent = (
+  // ...
+    <Grid container spacing={3} alignItems="stretch">
+      <EntitySwitch>
+        <EntitySwitch.Case if={isDatadogGraphAvailable}>
+          <Grid item>
+            <EntityDatadogGraphCard/>
+          </Grid>
+        </EntitySwitch.Case>
+      </EntitySwitch>
+    </Grid>
+  );
 
 const entityWarningContent = (
   <>
@@ -146,12 +165,12 @@ const serviceEntityPage = (
       {overviewContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+    <EntityLayout.Route path="/ci-cd" title="CircleCI">
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/circleci" title="CircleCI">
-      {circleciContent}
+    <EntityLayout.Route path="/datadog" title="Datadog">
+      {datadogContent}
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
